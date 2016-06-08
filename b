@@ -16,7 +16,6 @@
   PWD=`pwd`
  RDIR=`basename "$PWD"`
  BDIR="../.backup/$RDIR"
-  DIR="$PWD"
   PRG=`basename $0`
   day=`date +%d`;
 month=`date +%b`;
@@ -51,15 +50,15 @@ done
 # Copy all files in the current directory only if no file given on cmd line
 
 if [ `echo $FILES | grep -c "." 2>/dev/null` -eq 0 ] ; then
- 	# -------------------------------
- 	# FILES is empty so take current directory
-	FILES=`find . -type f -maxdepth 1`
+  # -------------------------------
+  # FILES is empty so take current directory
+  
+  FILES=`find . -type f -maxdepth 1`
 fi
 
 # --------------------------------------------------------------------------
 # Create the backup dir if not already present
 
-cd "$DIR"
 if [ ! -d "$BDIR" ]; then mkdir -p "$BDIR"; fi
 
 # --------------------------------------------------------------------------

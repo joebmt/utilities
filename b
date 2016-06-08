@@ -47,6 +47,9 @@ while [ $# -ne 0 ]; do
   esac
 done
 
+# --------------------------------------------------------------------------
+# Copy all files in the current directory only if no file given on cmd line
+
 if [ `echo $FILES | grep -c "." 2>/dev/null` -eq 0 ] ; then
  	# -------------------------------
  	# FILES is empty so take current directory

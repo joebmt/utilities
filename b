@@ -10,7 +10,9 @@
 #      OS: Works on mac and hpux operating systems.
 # ===========================================================================
 
-  # Make the backup directory up one and down in case someone does rm -rf .
+# --------------------------------------------------------------------------
+# Make the backup directory up one and down in case someone does rm -rf .
+
   PWD=`pwd`
  RDIR=`basename "$PWD"`
  BDIR="../.backup/$RDIR"

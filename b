@@ -1,18 +1,16 @@
 #!/usr/bin/env sh
 # ===========================================================================
 # Program: b - backup files passed as arguments or current directory without args
-#    Desc: Backup a File in ../.backup dir w/timestamp.
+#    Desc: Backup file/files in ../.backup dir w/unique timestamp.
 #   Notes: You should use git or another source code control system instead
 #          but this program is for when you need a quick file backup
 #          instead of manually backing up the file with cp continuously.
+#          When you want to quickly backup a directory this program helps.
 #  Author: Joe Orzehoski
-#    Date: 6/1/2014
 #      OS: Works on mac and hpux operating systems.
 # ===========================================================================
 
-# --------------------------------------------------------------------------
-# Make the backup directory up one and down in case someone does rm -rf .
-
+  # Make the backup directory up one and down in case someone does rm -rf .
   PWD=`pwd`
  RDIR=`basename "$PWD"`
  BDIR="../.backup/$RDIR"
@@ -30,7 +28,9 @@ month=`date +%b`;
 
 USAGE="$PRG - backup files to ../.backup directory w/timestamp name
 Usage: $PRG [-h] [file1 file2 ...]
-   Ex: $PRG ............... backups default files in var FILE in $PRG"
+   Ex: $PRG ............... backups all files recursively in current directory to ../.backup/<all_sub_dirs>
+   Ex: $PRG a b ........... backup files a and b in ../.backup/a ../.backup/b
+   Ex: $PRG * ............. backup all files only in current directory; no sub directories"
 
 # --------------------------------------------------------------------------
 # Process commandline arguments
@@ -46,14 +46,11 @@ while [ $# -ne 0 ]; do
   esac
 done
 
-# --------------------------------------------------------------------------
-# Copy all files in the current directory only if no file given on cmd line
-
 if [ `echo $FILES | grep -c "." 2>/dev/null` -eq 0 ] ; then
-  # -------------------------------
-  # FILES is empty so take current directory
-  
-  FILES=`find . -type f -maxdepth 1`
+ 	# -------------------------------
+ 	# FILES is empty so take current directory
+	# FILES=`find . -type f -maxdepth 1`
+	FILES=`find . -type f -maxdepth 20`
 fi
 
 # --------------------------------------------------------------------------
@@ -67,7 +64,11 @@ if [ ! -d "$BDIR" ]; then mkdir -p "$BDIR"; fi
 for file in `echo $FILES`
 do
   if [ -f $file ]; then
-    echo "Run: cp $file $BDIR/${file}_${DATE}"
+    echo "Run: cp -R $file $BDIR/${file}_${DATE}"
+    # set -xv
+    DIR=$(dirname $BDIR/$file)
+    mkdir -p $DIR
     cp $file "$BDIR/${file}_${DATE}"
+    # set +xv
   fi
 done
